@@ -1,0 +1,1 @@
+from noswear.checker import checker
