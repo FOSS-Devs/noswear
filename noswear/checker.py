@@ -1,4 +1,4 @@
-def detector(sentence):
+def checker(sentence):
     with open("wordlist.txt", "r") as words:
         lines = words.readlines()
     wordlist = [l.replace("\n", "") for l in lines]
