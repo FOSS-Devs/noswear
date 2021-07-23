@@ -7,7 +7,7 @@ setuptools.setup(
     name="noswear",
     version="0.1",
     author="FOSS-Devs",
-    description="A library for detection swear words.",
+    description="A library for detecting swear words.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/FOSS-Devs/noswear",
