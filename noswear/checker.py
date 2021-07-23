@@ -18,8 +18,8 @@ def checker(sentence):
     e = ["e", "*", "3"]
     s = ["s", "$", "5"]
     t = ["t", "7"]
-    for i in sentence:
-        for j in wordlist:
-            if j in sentence.lower():
-                return True
+    for j in wordlist:
+        if j in sentence.lower():
+            return True
+    
     return False
