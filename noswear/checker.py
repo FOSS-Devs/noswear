@@ -18,8 +18,11 @@ def checker(sentence):
     e = ["e", "*", "3"]
     s = ["s", "$", "5"]
     t = ["t", "7"]
+    spec_char = {"!": "i", "@": "a", "$": "s"}
+    sentence = sentence.lower()
+    for attr, value in spec_char.items():
+        sentence = sentence.replace(attr, value)
     for j in wordlist:
-        if j in sentence.lower():
+        if j in sentence:
             return True
-    
     return False
