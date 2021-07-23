@@ -1,8 +1,0 @@
-README.md
-setup.py
-noswear/__init__.py
-noswear/checker.py
-noswear.egg-info/PKG-INFO
-noswear.egg-info/SOURCES.txt
-noswear.egg-info/dependency_links.txt
-noswear.egg-info/top_level.txt
