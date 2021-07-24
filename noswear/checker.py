@@ -4,9 +4,7 @@ import os
 import difflib
 
 def get_data(path):
-    _ROOT = os.path.abspath(os.path.dirname(__file__))
-    _ROOT = _ROOT + "\\data\\"
-    return os.path.join(_ROOT, path)
+    return os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\wordlist.txt'))
 
 def check(sentence, similarity: float = 0.75, lib: str = None):
     if lib is None:
