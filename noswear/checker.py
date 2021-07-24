@@ -30,13 +30,22 @@ def check(string, similarity: float = 0.91, lib: str = None):
         string = ' '.join(string.split())
         for word in string.split(' '):
             word = ''.join(filter(str.isalpha, word))
-            for bad in badwords:
-                if diffcheck(word, bad, similarity) or bad in word:
-                    return True
+            if len(word()) > 6:
+                for bad in badwords:
+                    if diffcheck(word, bad, similarity) or bad in word:
+                        return True
+            else:
+                for bad in badwords:
+                    if diffcheck(word, bad, similarity) or bad == word:
+                        return True
     else:
         for bad in badwords:
-            if bad in string:
-                return True 
+            if len(string()) > 6:
+                if bad in string:
+                    return True 
+            else:
+                if bad == string:
+                    return True 
         if diffcheck(string, bad, similarity):
             return True
     return False
