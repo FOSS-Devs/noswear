@@ -6,14 +6,13 @@ import difflib
 def get_data(path):
     return os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\wordlist.txt'))
 
-def check(sentence, similarity: float = 0.75, lib: str = None):
+def check(string, similarity: float = 0.9, lib: str = None):
     if lib is None:
         with open(get_data("wordlist.txt"), "r") as words:
-            lines = words.readlines()
+            badwords = words.read().splitlines()
     else:
         with open(get_data(lib), "r") as words:
-            lines = words.readlines()
-    wordlist = [l.replace("\n", "") for l in lines]
+            badwords = words.read().splitlines()
     #a = ["a", "@", "*"]
     #i = ["i", "*", "1", "!"]
     #o = ["o", "*", "@", "0"]
@@ -24,32 +23,27 @@ def check(sentence, similarity: float = 0.75, lib: str = None):
     #s = ["s", "$", "5"]
     #t = ["t", "7"]
     spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s"}
-    sentence = sentence.lower()
+    string = string.lower()
     for attr, value in spec_char.items():
-        sentence = sentence.replace(attr, value)
-    for j in wordlist:
-        if j in sentence:
-            return True 
-    if " " in sentence:
-        sentence = " ".join(sentence.split())
-        for i in sentence.split(" "):
-            i = ''.join(filter(str.isalpha, i))
-            if not diffcheck(sentence, similarity, lib):
-                pass
-            else:
-                return True
+        string = string.replace(attr, value)
+    if ' ' in string:
+        string = ' '.join(string.split())
+        for word in string.split(' '):
+            word = ''.join(filter(str.isalpha, word))
+            for bad in badwords:
+                if diffcheck(word, bad, similarity) or bad in word:
+                    return True
     else:
-        if diffcheck(sentence, similarity, lib):
+        for bad in badwords:
+            if bad in string:
+                return True 
+        if diffcheck(string, bad, similarity):
             return True
     return False
 
-def diffcheck(sentence, similarity: float = 0.75, lib: str = "wordlist.txt"):
-    with open(get_data(lib), "r") as words:
-        lines = words.readlines()
-    wordlist = [l.replace("\n", "") for l in lines]
-    for keyword in wordlist:
-        score = difflib.SequenceMatcher(None, sentence.lower(), keyword).quick_ratio()
-        if score >= similarity:
-            return True
+def diffcheck(word, badword, similarity: float):
+    score = difflib.SequenceMatcher(None, word, badword).quick_ratio()
+    if score >= similarity:
+        return True
     return False
     
