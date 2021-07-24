@@ -6,7 +6,7 @@ import difflib
 def get_data(path):
     return os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\wordlist.txt'))
 
-def check(string, similarity: float = 0.9, lib: str = None):
+def check(string, similarity: float = 0.91, lib: str = None):
     if lib is None:
         with open(get_data("wordlist.txt"), "r") as words:
             badwords = words.read().splitlines()
