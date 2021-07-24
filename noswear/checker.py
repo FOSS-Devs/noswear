@@ -46,8 +46,8 @@ def check(string, similarity: float = 0.91, lib: str = None):
             else:
                 if bad == string:
                     return True 
-        if diffcheck(string, bad, similarity):
-            return True
+                elif diffcheck(string, bad, similarity):
+                    return True
     return False
 
 def diffcheck(word, badword, similarity: float):
