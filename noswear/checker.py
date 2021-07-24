@@ -3,14 +3,18 @@
 import os
 import difflib
 
-_ROOT = os.path.abspath(os.path.dirname(__file__))
-
 def get_data(path):
+    _ROOT = os.path.abspath(os.path.dirname(__file__))
+    _ROOT = _ROOT + "\\data\\"
     return os.path.join(_ROOT, path)
 
-def check(sentence, similarity: float = 0.75, lib: str = "wordlist.txt"):
-    with open(get_data(lib), "r") as words:
-        lines = words.readlines()
+def check(sentence, similarity: float = 0.75, lib: str = None):
+    if lib is None:
+        with open(get_data("wordlist.txt"), "r") as words:
+            lines = words.readlines()
+    else:
+        with open(get_data(lib), "r") as words:
+            lines = words.readlines()
     wordlist = [l.replace("\n", "") for l in lines]
     #a = ["a", "@", "*"]
     #i = ["i", "*", "1", "!"]
