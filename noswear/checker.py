@@ -1,6 +1,7 @@
 # Copyright (c) 2021 FOSS-Devs
 # See LICENSE in the project root for license information.
-import os, difflib
+import os
+import difflib
 
 _ROOT = os.path.abspath(os.path.dirname(__file__))
 
