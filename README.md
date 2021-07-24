@@ -3,7 +3,7 @@ A fast and simple library for detecting swear words
 
 ## Usage
 ```python
-from noswear import checker
+from noswear import check
 check("shit")
 >> True
 ```
