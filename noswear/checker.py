@@ -21,8 +21,7 @@ def check(string, similarity: float = 0.91, lib: str = None):
     #l = ["l", "1"]
     #e = ["e", "*", "3"]
     #s = ["s", "$", "5"]
-    #t = ["t", "7"]
-    spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s"}
+    spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s", "4": "a", "7": "t", "3": "e"}
     string = string.lower()
     for attr, value in spec_char.items():
         string = string.replace(attr, value)
@@ -30,23 +29,22 @@ def check(string, similarity: float = 0.91, lib: str = None):
         string = ' '.join(string.split())
         for word in string.split(' '):
             word = ''.join(filter(str.isalpha, word))
-            if len(word) > 6:
-                for bad in badwords:
-                    if diffcheck(word, bad, similarity) or bad in word:
-                        return True
-            else:
-                for bad in badwords:
-                    if diffcheck(word, bad, similarity) or bad == word:
+            for bad in badwords:
+                if bad == word:
+                    return True 
+                elif diffcheck(word, bad, similarity) and len(word) == len(bad) and len(word) <= 10:
+                    return True
+                elif len(word) >= 4 and len(bad) > 3:
+                    if bad in word or word in bad:
                         return True
     else:
         for bad in badwords:
-            if len(string) > 6:
-                if bad in string:
-                    return True 
-            else:
-                if bad == string:
-                    return True 
-                elif diffcheck(string, bad, similarity):
+            if bad == string:
+                return True 
+            elif diffcheck(string, bad, similarity) and len(string) == len(bad) and len(string) <= 10:
+                return True
+            elif len(string) >= 4 and len(bad) > 3:
+                if bad in string or string in bad:
                     return True
     return False
 
