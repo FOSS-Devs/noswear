@@ -6,7 +6,7 @@ import difflib
 def get_data(path):
     return os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\wordlist.txt'))
 
-def check(string, similarity: float = 0.91, lib: str = None):
+def check(string, similarity: float = 0.80, lib: str = None):
     if lib is None:
         with open(get_data("wordlist.txt"), "r") as words:
             badwords = words.read().splitlines()
@@ -32,7 +32,7 @@ def check(string, similarity: float = 0.91, lib: str = None):
             for bad in badwords:
                 if bad == word:
                     return True 
-                elif diffcheck(word, bad, similarity) and len(word) == len(bad) and len(word) <= 10:
+                elif len(word) == len(bad) and diffcheck(word, bad, similarity):
                     return True
                 elif len(word) >= 4 and len(bad) > 3:
                     if bad in word or word in bad:
@@ -41,7 +41,7 @@ def check(string, similarity: float = 0.91, lib: str = None):
         for bad in badwords:
             if bad == string:
                 return True 
-            elif diffcheck(string, bad, similarity) and len(string) == len(bad) and len(string) <= 10:
+            elif len(string) == len(bad) and len(string) <= 12 and diffcheck(string, bad, similarity):
                 return True
             elif len(string) >= 4 and len(bad) > 3:
                 if bad in string or string in bad:
