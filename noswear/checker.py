@@ -4,18 +4,18 @@ import os
 import difflib
 
 class noswear():
-    path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\wordlist.txt'))
+    badlibpath = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\wordlist.txt'))
 
-    def __init__(self, string, similarity: float = 0.76, path = path):
+    def __init__(self, string, similarity: float = 0.76, badlib = badlibpath):
         self.string = string
         self.similarity = similarity
-        self.path = path
+        self.badlib = badlib
         self.getresult = False
         self._check()
 
     def _check(self):#, string, similarity: float = 0.76, path = path):
         self.getresult = False
-        with open(f"{self.path}", "r") as words:
+        with open(f"{self.badlib}", "r") as words:
             badwords = words.read().splitlines()
         spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s", "4": "a"}
         string = self.string.lower()
