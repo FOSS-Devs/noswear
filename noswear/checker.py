@@ -25,7 +25,7 @@ class noswear():
         string = self.string.lower()
         for attr, value in spec_char.items():
             string = string.replace(attr, value)
-        if ' ' in string and len(string) > 10:
+        if ' ' in string and len(string) > 9:
             string = ' '.join(string.split())
             for word in string.split(' '):
                 for badword in badwords:
@@ -33,13 +33,19 @@ class noswear():
                         if self._checker(word, badword, self.similarity):
                             self.getresult = True
                             return self.getresult
-        else:
+        elif ' ' in string and len(string) < 10:            
             string = string.replace(' ', '')
             for badword in badwords:
-                    if not string in normal_words:
-                        if self._checker(string, badword, self.similarity):
-                            self.getresult = True
-                            return self.getresult
+                if not string in normal_words:
+                    if self._checker(string, badword, self.similarity):
+                        self.getresult = True
+                        return self.getresult
+        else:
+            for badword in badwords:
+                if not string in normal_words:
+                    if self._checker(string, badword, self.similarity):
+                        self.getresult = True
+                        return self.getresult
         return self.getresult
 
     def _diffcheck(self, word, badword, similarity: float):
