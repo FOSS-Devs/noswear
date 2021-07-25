@@ -25,16 +25,16 @@ class noswear():
         string = self.string.lower()
         for attr, value in spec_char.items():
             string = string.replace(attr, value)
-        if ' ' in string:
+        if ' ' in string and len(string) > 10:
             string = ' '.join(string.split())
             for word in string.split(' '):
-                word = ''.join(filter(str.isalpha, word))
                 for badword in badwords:
                     if not word in normal_words:
                         if self._checker(word, badword, self.similarity):
                             self.getresult = True
                             return self.getresult
         else:
+            string = string.replace(' ', '')
             for badword in badwords:
                     if not string in normal_words:
                         if self._checker(string, badword, self.similarity):
