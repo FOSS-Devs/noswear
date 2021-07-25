@@ -7,7 +7,7 @@ class noswear():
     badlibpath = os.path.join(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')), 'data', 'wordlist.txt')
     whitelist = os.path.join(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')), 'data', 'clean.txt')
     
-    def __init__(self, string, similarity: float = 0.70, badlib = badlibpath, whitelist = whitelist):
+    def __init__(self, string, similarity: float = 0.73, badlib = badlibpath, whitelist = whitelist):
         self.string = string
         self.similarity = similarity
         self.badlib = badlib
@@ -56,7 +56,7 @@ class noswear():
             return True 
         elif self._diffcheck(string, badword, similarity):
             return True
-        elif len(string) > 3 and len(badword) > 4:
+        elif len(string) > 3 and len(badword) > 3:
             if badword in string:
                 return True
         return False
