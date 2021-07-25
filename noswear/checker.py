@@ -4,9 +4,8 @@ import os
 import difflib
 
 class noswear():
-    root = os.path.abspath(os.path.dirname(__file__))
-    badlibpath = os.path.join(root, "wordlist.txt")
-    whitelist = os.path.join(root, "clean.txt")
+    badlibpath = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "wordlist.txt")
+    whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "clean.txt")
     
     def __init__(self, string, similarity: float = 0.73, badlib = badlibpath, whitelist = whitelist):
         self.string = string
