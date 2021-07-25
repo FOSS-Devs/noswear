@@ -49,7 +49,7 @@ def check(string, similarity: float = 0.80, lib: str = None):
     return False
 
 def diffcheck(word, badword, similarity: float):
-    score = difflib.SequenceMatcher(None, word, badword).quick_ratio()
+    score = difflib.SequenceMatcher(None, word, badword).ratio()
     if score >= similarity:
         return True
     return False
