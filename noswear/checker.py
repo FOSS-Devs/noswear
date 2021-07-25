@@ -56,7 +56,7 @@ class noswear():
             return True 
         elif self._diffcheck(string, badword, similarity):
             return True
-        elif len(string) > 3 and len(badword) > 3:
+        elif len(string) > 3 and len(badword) > 4:
             if badword in string:
                 return True
         return False
