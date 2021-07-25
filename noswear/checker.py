@@ -28,6 +28,7 @@ class noswear():
         if ' ' in string and len(string) > 9:
             string = ' '.join(string.split())
             for word in string.split(' '):
+                word = ''.join(filter(str.isalpha, word))
                 for badword in badwords:
                     if not word in normal_words:
                         if self._checker(word, badword, self.similarity):
