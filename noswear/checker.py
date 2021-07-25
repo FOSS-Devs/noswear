@@ -3,54 +3,48 @@
 import os
 import difflib
 
-def get_data(path):
-    return os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\wordlist.txt'))
+class Noswear():
+    path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\wordlist.txt'))
 
-def check(string, similarity: float = 0.76, lib: str = None):
-    if lib is None:
-        with open(get_data("wordlist.txt"), "r") as words:
+    def __init__(self):
+        pass
+
+    def check(self, string, similarity: float = 0.76, path = path):
+        with open(f"{path}", "r") as words:
             badwords = words.read().splitlines()
-    else:
-        with open(get_data(lib), "r") as words:
-            badwords = words.read().splitlines()
-    #a = ["a", "@", "*"]
-    #i = ["i", "*", "1", "!"]
-    #o = ["o", "*", "@", "0"]
-    #u = ["u", "*"]
-    #v = ["v", "*"]
-    #l = ["l", "1"]
-    #e = ["e", "*", "3"]
-    #s = ["s", "$", "5"]
-    spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s", "4": "a", "7": "t", "3": "e"}
-    string = string.lower()
-    for attr, value in spec_char.items():
-        string = string.replace(attr, value)
-    if ' ' in string:
-        string = ' '.join(string.split())
-        for word in string.split(' '):
-            word = ''.join(filter(str.isalpha, word))
-            for bad in badwords:
-                if bad == word:
-                    return True 
-                elif len(word) == len(bad) and diffcheck(word, bad, similarity):
-                    return True
-                elif len(word) >= 4 and len(bad) > 3:
-                    if bad in word or word in bad:
+        spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s", "4": "a"}
+        string = string.lower()
+        for attr, value in spec_char.items():
+            string = string.replace(attr, value)
+        if ' ' in string:
+            string = ' '.join(string.split())
+            for word in string.split(' '):
+                word = ''.join(filter(str.isalpha, word))
+                for badword in badwords:
+                    if self._checker(word, badword, similarity):
                         return True
-    else:
-        for bad in badwords:
-            if bad == string:
-                return True 
-            elif len(string) == len(bad) and diffcheck(string, bad, similarity):
-                return True
-            elif len(string) >= 4 and len(bad) > 3:
-                if bad in string or string in bad:
+        else:
+            for badword in badwords:
+                if self._checker(string, badword, similarity):
                     return True
-    return False
+        return False
 
-def diffcheck(word, badword, similarity: float):
-    score = difflib.SequenceMatcher(None, word, badword).ratio()
-    if score >= similarity:
-        return True
-    return False
-    
+    def _diffcheck(self, word, badword, similarity: float):
+        score = difflib.SequenceMatcher(None, word, badword, autojunk=False).ratio()
+        if score >= similarity:
+            #print(f"Word: '{word}' Badword: '{badword}' Score: '{score}'")
+            return True
+        return False
+
+    def _checker(self, string, badword, similarity: float):
+        if badword == string:
+            #print(f"Word: '{badword}' Badword: '{badword}' 'location 1'")
+            return True 
+        elif len(string) == len(badword) and self._diffcheck(string, badword, similarity):
+            #print("'location 2'")
+            return True
+        elif len(string) >= 6 and len(badword) > 3:
+            if badword in string or string in badword:
+                #print(f"Word: '{string}' Badword: '{badword}' 'location 3'")
+                return True
+        return False
