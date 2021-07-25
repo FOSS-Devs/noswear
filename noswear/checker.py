@@ -41,7 +41,7 @@ def check(string, similarity: float = 0.76, lib: str = None):
         for bad in badwords:
             if bad == string:
                 return True 
-            elif len(string) == len(bad) and len(string) <= 12 and diffcheck(string, bad, similarity):
+            elif len(string) == len(bad) and diffcheck(string, bad, similarity):
                 return True
             elif len(string) >= 4 and len(bad) > 3:
                 if bad in string or string in bad:
