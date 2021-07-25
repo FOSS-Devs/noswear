@@ -10,11 +10,11 @@ class noswear():
         self.string = string
         self.similarity = similarity
         self.path = path
-        self.result = False
+        self.getresult = False
         self._check()
 
     def _check(self):#, string, similarity: float = 0.76, path = path):
-        self.result = False
+        self.getresult = False
         with open(f"{self.path}", "r") as words:
             badwords = words.read().splitlines()
         spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s", "4": "a"}
@@ -27,14 +27,14 @@ class noswear():
                 word = ''.join(filter(str.isalpha, word))
                 for badword in badwords:
                     if self._checker(word, badword, self.similarity):
-                        self.result = True
-                        return self.result
+                        self.getresult = True
+                        return self.getresult
         else:
             for badword in badwords:
                 if self._checker(string, badword, self.similarity):
-                    self.result = True
-                    return self.result
-        return self.result
+                    self.getresult = True
+                    return self.getresult
+        return self.getresult
 
     def _diffcheck(self, word, badword, similarity: float):
         score = difflib.SequenceMatcher(None, word, badword, autojunk=False).ratio()
