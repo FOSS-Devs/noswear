@@ -5,11 +5,13 @@ import difflib
 
 class noswear():
     badlibpath = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\wordlist.txt'))
-
-    def __init__(self, string, similarity: float = 0.76, badlib = badlibpath):
+    whitelist = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data\\clean.txt'))
+    
+    def __init__(self, string, similarity: float = 0.60, badlib = badlibpath, whitelist = whitelist):
         self.string = string
         self.similarity = similarity
         self.badlib = badlib
+        self.whitelist = whitelist
         self.getresult = False
         self._check()
 
@@ -17,6 +19,8 @@ class noswear():
         self.getresult = False
         with open(f"{self.badlib}", "r") as words:
             badwords = words.read().splitlines()
+        with open(f"{self.whitelist}", "r") as whitelist:
+            normal_words = whitelist.read().splitlines()
         spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s", "4": "a"}
         string = self.string.lower()
         for attr, value in spec_char.items():
@@ -26,14 +30,16 @@ class noswear():
             for word in string.split(' '):
                 word = ''.join(filter(str.isalpha, word))
                 for badword in badwords:
-                    if self._checker(word, badword, self.similarity):
-                        self.getresult = True
-                        return self.getresult
+                    if not word in normal_words:
+                        if self._checker(word, badword, self.similarity):
+                            self.getresult = True
+                            return self.getresult
         else:
             for badword in badwords:
-                if self._checker(string, badword, self.similarity):
-                    self.getresult = True
-                    return self.getresult
+                    if not string in normal_words:
+                        if self._checker(string, badword, self.similarity):
+                            self.getresult = True
+                            return self.getresult
         return self.getresult
 
     def _diffcheck(self, word, badword, similarity: float):
