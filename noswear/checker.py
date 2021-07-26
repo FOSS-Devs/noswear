@@ -67,7 +67,7 @@ class noswear():
 
     def _checker(self, string, badword, sensitivity: float):
         x = len(string)
-        sensitivity = (sensitivity) * (x ** 2) + 0.013 * x + 0.6
+        sensitivity = (sensitivity) * ((x * 1.9) ** 2) + 0.04 * x + 0.6
         if sensitivity > 1:
             sensitivity = 0.88
         self.fullresult = {"method": None, "badword": None, "detected": string, "score": self.score, "sensitivity": sensitivity}
