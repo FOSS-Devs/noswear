@@ -53,7 +53,7 @@ class noswear():
     def _diffcheck(self, word, badword, similarity: float):
         oversize = len(word) + 2
         undersize = len(word) - 2
-        if len(badword) < oversize and len(badword) > undersize:
+        if len(badword) <= oversize and len(badword) >= undersize:
             score = difflib.SequenceMatcher(None, word, badword, autojunk=False).ratio()
             if score >= similarity:
                 self.fullresult = {"method": 2, "badword": badword, "detected": word, "score": score}
