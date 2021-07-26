@@ -26,7 +26,7 @@ class noswear():
             badwords = words.read().splitlines()
         with open(f"{self.whitelist}", "r") as whitelist:
             normal_words = whitelist.read().splitlines()
-        spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s", "4": "a"}
+        spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s", "4": "a", "7": "t"}
         string = self.string.lower()
         for attr, value in spec_char.items():
             string = string.replace(attr, value)
@@ -40,7 +40,7 @@ class noswear():
                         if self._checker(word, badword, self.sensitivity):
                             self.getresult = True
                             return self.getresult
-        elif spaces < 4 and len(string) > 14:
+        elif spaces < 4 and len(string) >= 14:
             string = textwrap.wrap(string, 5)
             for badword in badwords:
                 for word in string:
@@ -60,7 +60,7 @@ class noswear():
         oversize = len(word) + 2
         undersize = len(word) - 2
         if len(badword) <= oversize and len(badword) >= undersize:
-            score = difflib.SequenceMatcher(None, word, badword, autojunk=False).ratio()
+            score = difflib.SequenceMatcher(None, word, badword, autojunk=True).quick_ratio()
             if score >= sensitivity:
                 self.score = score
                 return True
