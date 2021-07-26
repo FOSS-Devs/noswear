@@ -13,6 +13,7 @@ class noswear():
         self.badlib = badlib
         self.whitelist = whitelist
         self.getresult = False
+        self.fullresult = None
         self._check()
 
     def _check(self):
@@ -55,15 +56,18 @@ class noswear():
         if len(badword) < oversize and len(badword) > undersize:
             score = difflib.SequenceMatcher(None, word, badword, autojunk=False).ratio()
             if score >= similarity:
+                self.fullresult = {"method": 2, "badword": badword, "detected": word, "score": score}
                 return True
         return False
 
     def _checker(self, string, badword, similarity: float):
         if badword == string:
+            self.fullresult = {"method": 1, "badword": badword, "detected": string}
             return True 
         elif self._diffcheck(string, badword, similarity):
             return True
         elif len(string) > 3 and len(badword) > 3:
             if badword in string:
+                self.fullresult = {"method": 3, "badword": badword, "detected": string}
                 return True
         return False
