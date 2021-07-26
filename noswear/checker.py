@@ -37,7 +37,7 @@ class noswear():
                 if self._checker(string.replace(' ', ''), badword, self.sensitivity):
                     self.getresult = True
                     return self.getresult
-        if spaces > 3 and len(string) > 9:
+        if spaces > 1 and len(string) > 9:
             string = ' '.join(string.split())
             for word in string.split(' '):
                 for badword in badwords:
@@ -68,6 +68,9 @@ class noswear():
     def _checker(self, string, badword, sensitivity: float):
         x = len(string)
         sensitivity = (sensitivity) * (x ** 2) + 0.004 * x + 0.6
+        if sensitivity > 1:
+            sensitivity = 0.9
+        self.fullresult = {"method": None, "badword": None, "detected": string, "score": self.score, "sensitivity": sensitivity}
         if badword == string:
             {"method": 1, "badword": badword, "detected": string, "score": self.score, "sensitivity": sensitivity}
             return True 
