@@ -36,13 +36,14 @@ class noswear():
                             self.getresult = True
                             return self.getresult
         elif ' ' in string and len(string) < 10:            
-            string = string.replace(' ', '')
+            string = ''.join(filter(str.isalpha, string))
             for badword in badwords:
                 if not string in normal_words:
                     if self._checker(string, badword, self.similarity):
                         self.getresult = True
                         return self.getresult
         else:
+            string = ''.join(filter(str.isalpha, string))
             for badword in badwords:
                 if not string in normal_words:
                     if self._checker(string, badword, self.similarity):
