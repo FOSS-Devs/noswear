@@ -3,6 +3,7 @@
 import os
 import difflib
 import textwrap
+import re
 
 class noswear():
     badlibpath = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "wordlist.txt")
@@ -29,33 +30,25 @@ class noswear():
         string = self.string.lower()
         for attr, value in spec_char.items():
             string = string.replace(attr, value)
-        if ' ' in string and len(string) > 9:
+        string = re.sub(r"[^a-zA-Z0-9]+", ' ', string)
+        spaces = len(string.split())
+        if spaces > 3 and len(string) > 9:
             string = ' '.join(string.split())
             for word in string.split(' '):
-                word = ''.join(filter(str.isalpha, word))
                 for badword in badwords:
                     if not word in normal_words:
                         if self._checker(word, badword, self.sensitivity):
                             self.getresult = True
                             return self.getresult
-        elif ' ' in string and len(string) < 10:            
-            string = ''.join(filter(str.isalpha, string))
-            for badword in badwords:
-                if not string in normal_words:
-                    if self._checker(string, badword, self.sensitivity):
-                        self.getresult = True
-                        return self.getresult
-        elif ' ' not in string in string and len(string) > 10:
-            string = ''.join(filter(str.isalpha, string))
+        elif spaces < 4 and len(string) > 14:
             string = textwrap.wrap(string, 5)
             for badword in badwords:
                 for word in string:
-                    if not string in normal_words:
+                    if not word in normal_words:
                         if self._checker(word, badword, self.sensitivity):
                             self.getresult = True
                             return self.getresult
         else:
-            string = ''.join(filter(str.isalpha, string))
             for badword in badwords:
                 if not string in normal_words:
                     if self._checker(string, badword, self.sensitivity):
