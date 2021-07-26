@@ -7,9 +7,9 @@ class noswear():
     badlibpath = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "wordlist.txt")
     whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "clean.txt")
     
-    def __init__(self, string, similarity: float = 0.73, badlib = badlibpath, whitelist = whitelist):
+    def __init__(self, string, sensitivity: float = 0.73, badlib = badlibpath, whitelist = whitelist):
         self.string = string
-        self.similarity = similarity
+        self.sensitivity = sensitivity
         self.badlib = badlib
         self.whitelist = whitelist
         self.getresult = False
@@ -32,40 +32,40 @@ class noswear():
                 word = ''.join(filter(str.isalpha, word))
                 for badword in badwords:
                     if not word in normal_words:
-                        if self._checker(word, badword, self.similarity):
+                        if self._checker(word, badword, self.sensitivity):
                             self.getresult = True
                             return self.getresult
         elif ' ' in string and len(string) < 10:            
             string = ''.join(filter(str.isalpha, string))
             for badword in badwords:
                 if not string in normal_words:
-                    if self._checker(string, badword, self.similarity):
+                    if self._checker(string, badword, self.sensitivity):
                         self.getresult = True
                         return self.getresult
         else:
             string = ''.join(filter(str.isalpha, string))
             for badword in badwords:
                 if not string in normal_words:
-                    if self._checker(string, badword, self.similarity):
+                    if self._checker(string, badword, self.sensitivity):
                         self.getresult = True
                         return self.getresult
         return self.getresult
 
-    def _diffcheck(self, word, badword, similarity: float):
+    def _diffcheck(self, word, badword, sensitivity: float):
         oversize = len(word) + 2
         undersize = len(word) - 2
         if len(badword) <= oversize and len(badword) >= undersize:
             score = difflib.SequenceMatcher(None, word, badword, autojunk=False).ratio()
-            if score >= similarity:
+            if score >= sensitivity:
                 self.fullresult = {"method": 2, "badword": badword, "detected": word, "score": score}
                 return True
         return False
 
-    def _checker(self, string, badword, similarity: float):
+    def _checker(self, string, badword, sensitivity: float):
         if badword == string:
             self.fullresult = {"method": 1, "badword": badword, "detected": string}
             return True 
-        elif self._diffcheck(string, badword, similarity):
+        elif self._diffcheck(string, badword, sensitivity):
             return True
         elif len(string) > 3 and len(badword) > 3:
             if badword in string:
