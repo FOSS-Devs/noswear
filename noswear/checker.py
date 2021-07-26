@@ -69,7 +69,7 @@ class noswear():
         x = len(string)
         sensitivity = (sensitivity) * (x ** 2) + 0.004 * x + 0.6
         if sensitivity > 1:
-            sensitivity = 0.9
+            sensitivity = 0.88
         self.fullresult = {"method": None, "badword": None, "detected": string, "score": self.score, "sensitivity": sensitivity}
         if badword == string:
             {"method": 1, "badword": badword, "detected": string, "score": self.score, "sensitivity": sensitivity}
