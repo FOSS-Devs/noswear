@@ -45,7 +45,7 @@ class noswear():
                     if self._checker(string, badword, self.sensitivity):
                         self.getresult = True
                         return self.getresult
-        elif ' ' not in string in string and len(string) > 8:
+        elif ' ' not in string in string and len(string) > 10:
             string = ''.join(filter(str.isalpha, string))
             string = textwrap.wrap(string, 5)
             for badword in badwords:
