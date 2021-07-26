@@ -9,7 +9,7 @@ class noswear():
     badlibpath = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "wordlist.txt")
     whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "clean.txt")
     
-    def __init__(self, string, sensitivity: float = 80, badlib = badlibpath, whitelist = whitelist):
+    def __init__(self, string, sensitivity: float = 85, badlib = badlibpath, whitelist = whitelist):
         self.string = string
         if sensitivity < 1 or sensitivity > 100:
             raise ValueError
