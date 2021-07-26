@@ -17,7 +17,6 @@ class noswear():
         self._check()
 
     def _check(self):
-        self.getresult = False
         with open(f"{self.badlib}", "r") as words:
             badwords = words.read().splitlines()
         with open(f"{self.whitelist}", "r") as whitelist:
