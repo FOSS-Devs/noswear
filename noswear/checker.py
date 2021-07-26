@@ -13,7 +13,7 @@ class noswear():
         self.string = string
         if sensitivity < 1 or sensitivity > 100:
             raise ValueError
-        self.sensitivity = sensitivity / 8000
+        self.sensitivity = sensitivity / 1800
         self.score = None
         self.badlib = badlib
         self.whitelist = whitelist
@@ -72,16 +72,16 @@ class noswear():
             sensitivity = 0.96
         self.fullresult = {"method": None, "badword": None, "detected": string, "score": self.score, "sensitivity": sensitivity}
         if badword == string:
-            {"method": 1, "badword": badword, "detected": string, "score": self.score, "sensitivity": sensitivity}
+            {"method": 2, "badword": badword, "detected": string, "score": self.score, "sensitivity": sensitivity}
             return True 
         elif len(string) <= 12 and self._diffcheck(string, badword, sensitivity):
-            self.fullresult = {"method": 2, "badword": badword, "detected": string, "score": self.score, "sensitivity": sensitivity}
+            self.fullresult = {"method": 3, "badword": badword, "detected": string, "score": self.score, "sensitivity": sensitivity}
             return True
         return False
 
     def _pre_check(self,string, badword):
         if len(badword) > 3:
             if badword in string:
-                self.fullresult = {"method": 0, "badword": badword, "detected": string, "score": self.score, "sensitivity": None}
+                self.fullresult = {"method": 1, "badword": badword, "detected": string, "score": self.score, "sensitivity": None}
                 return True
         return False
