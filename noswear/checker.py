@@ -77,10 +77,6 @@ class noswear():
         elif len(string) <= 12 and self._diffcheck(string, badword, sensitivity):
             self.fullresult = {"method": 2, "badword": badword, "detected": string, "score": self.score, "sensitivity": sensitivity}
             return True
-        elif len(string) <= 12 and len(badword) > 3:
-            if badword in string or self._diffcheck(string, badword, sensitivity):
-                self.fullresult = {"method": 3, "badword": badword, "detected": string, "score": self.score, "sensitivity": sensitivity}
-                return True
         return False
 
     def _pre_check(self,string, badword):
