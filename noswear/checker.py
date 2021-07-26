@@ -8,9 +8,9 @@ class noswear():
     badlibpath = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "wordlist.txt")
     whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "clean.txt")
     
-    def __init__(self, string, sensitivity: float = 0.73, badlib = badlibpath, whitelist = whitelist):
+    def __init__(self, string, sensitivity: float = 85, badlib = badlibpath, whitelist = whitelist):
         self.string = string
-        if sensitivity < 0 or sensitivity > 100:
+        if sensitivity < 1 or sensitivity > 100:
             raise ValueError
         self.sensitivity = ((sensitivity * 0.003) / 85)
         self.score = None
