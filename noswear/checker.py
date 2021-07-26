@@ -59,7 +59,7 @@ class noswear():
         oversize = len(word) + 2
         undersize = len(word) - 2
         if len(badword) <= oversize and len(badword) >= undersize:
-            score = difflib.SequenceMatcher(None, word, badword, autojunk=True).ratio()
+            score = difflib.SequenceMatcher(None, word, badword, autojunk=True).quick_ratio()
             if score >= sensitivity:
                 self.score = score
                 return True
