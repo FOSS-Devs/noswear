@@ -4,10 +4,11 @@ import os
 import difflib
 import textwrap
 import re
+import json
 
 class noswear():
     badlibpath = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "wordlist.txt")
-    whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "clean.txt")
+    whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "clean.json")
     
     def __init__(self, string, sensitivity: float = 80, badlib = badlibpath, whitelist = whitelist):
         self.string = string
@@ -18,14 +19,14 @@ class noswear():
         self.badlib = badlib
         self.whitelist = whitelist
         self.getresult = False
-        self.fullresult = None
+        self.fullresult = {"method": None, "badword": None, "word": None, "score": self.score, "sensitivity": None}
         self._check()
 
     def _check(self):
         with open(f"{self.badlib}", "r") as words:
             badwords = words.read().splitlines()
         with open(f"{self.whitelist}", "r") as whitelist:
-            normal_words = whitelist.read().splitlines()
+            normal_words = json.load(whitelist)
         spec_char = {"@": "a", "1": "i", "!": "i", "0": "o", "1": "l", "3": "e", "$": "s", "5": "s", "4": "a", "7": "t"}
         string = self.string.lower()
         for attr, value in spec_char.items():
@@ -40,9 +41,7 @@ class noswear():
         if spaces > 1 and len(string) > 9:
             string = ' '.join(string.split())
             string = string.split(' ')
-            for word in string:
-                if word in normal_words:
-                    string.remove(word)
+            string = self._filter_clean_word(string, normal_words)
             for word in string:
                 for badword in badwords:
                     if self._checker(word, badword, self.sensitivity):
@@ -50,9 +49,7 @@ class noswear():
                         return self.getresult
         else:
             string = textwrap.wrap(string, 5)
-            for word in string:
-                if word in normal_words:
-                    string.remove(word)
+            string = self._filter_clean_word(string, normal_words)
             for badword in badwords:
                 for word in string:
                     if self._checker(word, badword, self.sensitivity):
@@ -90,3 +87,15 @@ class noswear():
                 self.fullresult = {"method": 1, "badword": badword, "word": string, "score": self.score, "sensitivity": None}
                 return True
         return False
+
+    def _filter_clean_word(self, string, normal_words):
+        if type(string) is list:
+            for w in normal_words:
+                for word in string:
+                    if word == w:
+                        print(f"'{word}' is in the list.")
+                        string.remove(word)
+        else:
+            if string in normal_words:
+                string = ""
+        return string
