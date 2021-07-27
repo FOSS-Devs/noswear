@@ -19,9 +19,9 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.6",
-    data_files=[('noswear', ['noswear/wordlist.txt']), ('noswear', ['noswear/clean.txt']) ],
+    data_files=[('noswear', ['noswear/wordlist.txt']), ('noswear', ['noswear/clean.json']) ],
     package_data={
         'badwords': ['noswear/wordlist.txt'],
-        'cleanword': ['noswear/clean.txt']
+        'cleanword': ['noswear/clean.json']
     },
 )
