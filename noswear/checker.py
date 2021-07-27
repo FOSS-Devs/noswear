@@ -41,8 +41,8 @@ class noswear():
             string = ' '.join(string.split())
             string = string.split(' ')
             for word in string:
-                if self._pre_filter(word, normal_words):
-                    string = string.replace(word, '')
+                if word in normal_words:
+                    string.remove(word)
             for word in string:
                 for badword in badwords:
                     if self._checker(word, badword, self.sensitivity):
@@ -51,8 +51,8 @@ class noswear():
         else:
             string = textwrap.wrap(string, 5)
             for word in string:
-                if self._pre_filter(word, normal_words):
-                    string = string.replace(word, '')
+                if word in normal_words:
+                    string.remove(word)
             for badword in badwords:
                 for word in string:
                     if self._checker(word, badword, self.sensitivity):
@@ -89,9 +89,4 @@ class noswear():
             if badword in string:
                 self.fullresult = {"method": 1, "badword": badword, "word": string, "score": self.score, "sensitivity": None}
                 return True
-        return False
-
-    def _pre_filter(self, string, normal_words):
-        if string == normal_words:
-            return True
         return False
