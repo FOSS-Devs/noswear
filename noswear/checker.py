@@ -93,7 +93,6 @@ class noswear():
             for w in normal_words:
                 for word in string:
                     if word == w:
-                        print(f"'{word}' is in the list.")
                         string.remove(word)
         else:
             if string in normal_words:
