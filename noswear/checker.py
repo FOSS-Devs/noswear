@@ -11,9 +11,9 @@ class noswear():
     whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "clean.json")
     
     def __init__(self, string, difficulty: float = 80, badlib = badlibpath, whitelist = whitelist):
-        self.string = string
         if difficulty < 1 or difficulty > 100:
             raise ValueError
+        self.string = string
         self.difficulty = difficulty / 1800
         self.score = None
         self.badlib = badlib
