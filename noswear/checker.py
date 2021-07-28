@@ -10,16 +10,16 @@ class noswear():
     badlibpath = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "wordlist.txt")
     whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "clean.json")
     
-    def __init__(self, string, sensitivity: float = 80, badlib = badlibpath, whitelist = whitelist):
+    def __init__(self, string, difficulty: float = 80, badlib = badlibpath, whitelist = whitelist):
         self.string = string
-        if sensitivity < 1 or sensitivity > 100:
+        if difficulty < 1 or difficulty > 100:
             raise ValueError
-        self.sensitivity = sensitivity / 1800
+        self.difficulty = difficulty / 1800
         self.score = None
         self.badlib = badlib
         self.whitelist = whitelist
         self.getresult = False
-        self.fullresult = {"method": None, "badword": None, "word": None, "score": self.score, "sensitivity": None}
+        self.fullresult = {"method": None, "badword": None, "word": None, "score": self.score, "difficulty": None}
         self._check()
 
     def _check(self):
@@ -33,18 +33,24 @@ class noswear():
             string = string.replace(attr, value)
         string = re.sub(r"[^a-zA-Z0-9]+", ' ', string)
         spaces = len(string.split())
-        _first = string.replace(' ', '')
+        no_space = string.replace(' ', '')
         for badword in badwords:
-            if self._pre_check(_first, badword):
+            if self._pre_check(no_space, badword):
                 self.getresult = True
                 return self.getresult
-        if spaces > 1 and len(string) > 9:
+        if len(no_space) < 10 and spaces > 1:
+            string = self._filter_clean_word(no_space, normal_words)
+            for badword in badwords:
+                if self._checker(string, badword, self.difficulty):
+                    self.getresult = True
+                    return self.getresult
+        elif spaces > 1 and len(string) > 9:
             string = ' '.join(string.split())
             string = string.split(' ')
             string = self._filter_clean_word(string, normal_words)
             for word in string:
                 for badword in badwords:
-                    if self._checker(word, badword, self.sensitivity):
+                    if self._checker(word, badword, self.difficulty):
                         self.getresult = True
                         return self.getresult
         else:
@@ -52,39 +58,39 @@ class noswear():
             string = self._filter_clean_word(string, normal_words)
             for badword in badwords:
                 for word in string:
-                    if self._checker(word, badword, self.sensitivity):
+                    if self._checker(word, badword, self.difficulty):
                         self.getresult = True
                         return self.getresult
         return self.getresult
 
-    def _diffcheck(self, word, badword, sensitivity: float):
+    def _diffcheck(self, word, badword, difficulty: float):
         oversize = len(word) + 2
         undersize = len(word) - 2
         if len(badword) <= oversize and len(badword) >= undersize:
             score = difflib.SequenceMatcher(None, word, badword, autojunk=True).quick_ratio()
-            if score >= sensitivity:
+            if score >= difficulty:
                 self.score = score
                 return True
         return False
 
-    def _checker(self, string, badword, sensitivity: float):
+    def _checker(self, string, badword, difficulty: float):
         x = len(string)
-        sensitivity = (x ** 2) / 500 + 0.79 +  sensitivity
-        if sensitivity > 1:
-            sensitivity = 0.96
-        self.fullresult = {"method": None, "badword": None, "word": string, "score": self.score, "sensitivity": sensitivity}
+        difficulty = (x ** 2) / 500 + 0.79 +  difficulty
+        if difficulty > 1:
+            difficulty = 0.96
+        self.fullresult = {"method": None, "badword": None, "word": string, "score": self.score, "difficulty": difficulty}
         if badword == string:
-            {"method": 2, "badword": badword, "word": string, "score": self.score, "sensitivity": sensitivity}
+            {"method": 2, "badword": badword, "word": string, "score": self.score, "difficulty": difficulty}
             return True 
-        elif len(string) <= 12 and self._diffcheck(string, badword, sensitivity):
-            self.fullresult = {"method": 3, "badword": badword, "word": string, "score": self.score, "sensitivity": sensitivity}
+        elif len(string) <= 12 and self._diffcheck(string, badword, difficulty):
+            self.fullresult = {"method": 3, "badword": badword, "word": string, "score": self.score, "difficulty": difficulty}
             return True
         return False
 
     def _pre_check(self,string, badword):
         if len(badword) > 3:
             if badword in string:
-                self.fullresult = {"method": 1, "badword": badword, "word": string, "score": self.score, "sensitivity": None}
+                self.fullresult = {"method": 1, "badword": badword, "word": string, "score": self.score, "difficulty": None}
                 return True
         return False
 
@@ -96,5 +102,5 @@ class noswear():
                         string.remove(word)
         else:
             if string in normal_words:
-                string = ""
+                string = string.replace(string, '')
         return string
