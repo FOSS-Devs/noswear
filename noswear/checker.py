@@ -2,7 +2,7 @@
 # See LICENSE in the project root for license information.
 import os
 import difflib
-import textwrap
+#import textwrap
 import re
 import json
 
@@ -34,10 +34,6 @@ class noswear():
         string = re.sub(r"[^a-zA-Z0-9]+", ' ', string)
         spaces = len(string.split())
         no_space = string.replace(' ', '')
-        for badword in badwords:
-            if self._pre_check(no_space, badword):
-                self.getresult = True
-                return self.getresult
         if len(no_space) < 10 and spaces > 1:
             string = self._filter_clean_word(no_space, normal_words)
             for badword in badwords:
@@ -54,13 +50,18 @@ class noswear():
                         self.getresult = True
                         return self.getresult
         else:
-            string = textwrap.wrap(string, 5)
-            string = self._filter_clean_word(string, normal_words)
             for badword in badwords:
-                for word in string:
-                    if self._checker(word, badword, self.difficulty):
-                        self.getresult = True
-                        return self.getresult
+                if self._simple_check(no_space, badword):
+                    self.getresult = True
+                    return self.getresult
+        #else:
+        #    string = textwrap.wrap(string, 5)
+        #    string = self._filter_clean_word(string, normal_words)
+        #    for badword in badwords:
+        #        for word in string:
+        #            if self._checker(word, badword, self.difficulty):
+        #                self.getresult = True
+        #                return self.getresult
         return self.getresult
 
     def _diffcheck(self, word, badword, difficulty: float):
@@ -87,7 +88,7 @@ class noswear():
             return True
         return False
 
-    def _pre_check(self,string, badword):
+    def _simple_check(self,string, badword):
         if len(badword) > 3:
             if badword in string:
                 self.fullresult = {"method": 1, "badword": badword, "word": string, "score": self.score, "difficulty": None}
