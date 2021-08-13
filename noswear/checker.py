@@ -105,6 +105,7 @@ class noswear():
                     if word == w:
                         string.remove(word)
         else:
-            if string in normal_words:
-                string = string.replace(string, '')
+            for w in normal_words:
+                if string == w:
+                    string = string.replace(string, '')
         return string
