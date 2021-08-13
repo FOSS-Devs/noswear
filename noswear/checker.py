@@ -52,6 +52,7 @@ class noswear():
                         self.getresult = True
                         return self.getresult
         else:
+            string = self._filter_clean_word(string, normal_words)
             for badword in badwords:
                 if self._simple_check(no_space, badword):
                     self.getresult = True
