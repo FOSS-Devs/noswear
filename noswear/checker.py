@@ -33,6 +33,7 @@ class noswear():
             string = string.replace(attr, value)
         #string = re.sub(r"[^a-zA-Z0-9]+", ' ', string)
         string = ''.join(l for l in string if l.isalnum() or l == " ")
+        string = ' '.join(string.split())
         spaces = len(string.split())
         no_space = string.replace(' ', '')
         if len(no_space) < 10 and spaces > 1:
