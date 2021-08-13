@@ -3,7 +3,7 @@
 import os
 import difflib
 #import textwrap
-import re
+#import re
 import json
 
 class noswear():
