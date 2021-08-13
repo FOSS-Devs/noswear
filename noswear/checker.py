@@ -7,8 +7,8 @@ import difflib
 import json
 
 class noswear():
-    badlibpath = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "wordlist.txt")
-    whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))), "clean.json")
+    badlibpath = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))),"data", "wordlist.txt")
+    whitelist = os.path.join(os.path.abspath(os.path.dirname(os.path.abspath(__file__))),"data", "clean.json")
     
     def __init__(self, string, difficulty: float = 80, badlib = badlibpath, whitelist = whitelist):
         if difficulty < 1 or difficulty > 100:
